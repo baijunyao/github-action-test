@@ -1,0 +1,13 @@
+name: test
+on: push
+jobs:
+  update_index:
+    name: Update Index
+    runs-on: ubuntu-latest
+    container:
+      image: algolia/docsearch-scraper
+    steps:
+      - name: Update Index
+        run: |
+          pwd
+          ls
