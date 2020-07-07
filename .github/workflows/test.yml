@@ -1,0 +1,17 @@
+name: test
+on: push
+jobs:
+  update_index:
+    name: Update Index
+    runs-on: ubuntu-latest
+    container:
+      image: algolia/docsearch-scraper
+    steps:
+      - name: Update Index
+        run: |
+          cd /root
+          pip install requests
+          echo APPLICATION_ID=${{ secrets.ALGOLIA_API_KEY }} > .env
+          echo API_KEY=${{ secrets.ALGOLIA_APPLICATION_ID }} >> .env
+          echo '{"index_name":"DocSearch","start_urls":["http://cloudnative.to/"],"selectors":{"lvl0":{"selector":".bg-cover h2","default_value":"Blog"},"lvl1":".content h1","lvl2":".content h2","lvl3":".content h3","lvl4":".content h4","lvl5":".content h5","text":".content p"},"selectors_exclude":["nav","footer",".aside"],"min_indexed_level":1,"scrap_start_urls":false}' > config.json
+          pipenv run python -m src.index /root/config.json
