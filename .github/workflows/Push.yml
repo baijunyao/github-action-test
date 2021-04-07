@@ -1,0 +1,57 @@
+name: PUSH
+
+on: [push, pull_request]
+
+jobs:
+  test1:
+    name: test1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        run: |
+          pwd
+  test2:
+    name: test2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJSON(job) }}
+        run: echo "$JOB_CONTEXT"
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJSON(runner) }}
+        run: echo "$RUNNER_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJSON(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJSON(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
+      - name: Dump secrets context
+        env:
+          SECRETS_CONTEXT: ${{ toJSON(secrets) }}
+        run: echo "$SECRETS_CONTEXT"
+  notify:
+    name: Slack Notify
+    runs-on: ubuntu-latest
+    needs: [test1,test2]
+    if: ${{ github.event_name == 'push' }}
+    steps:
+      - name: Slack Notify
+        uses: baijunyao/action-slack-notify@v3.0.0
+        if: always()
+        with:
+          slack_channel_id: GN87KBVDG
+          slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
+          github_context: ${{ toJson(github) }}
