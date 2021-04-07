@@ -42,6 +42,7 @@ jobs:
         env:
           SECRETS_CONTEXT: ${{ toJSON(secrets) }}
         run: echo "$SECRETS_CONTEXT"
+        
   notify:
     name: Slack Notify
     runs-on: ubuntu-latest
