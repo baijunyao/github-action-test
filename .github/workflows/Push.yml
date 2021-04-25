@@ -38,10 +38,6 @@ jobs:
         env:
           MATRIX_CONTEXT: ${{ toJSON(matrix) }}
         run: echo "$MATRIX_CONTEXT"
-      - name: Dump secrets context
-        env:
-          SECRETS_CONTEXT: ${{ toJSON(secrets) }}
-        run: echo "$SECRETS_CONTEXT"
   notify:
     name: Slack Notify
     runs-on: ubuntu-latest
@@ -49,7 +45,7 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     steps:
       - name: Slack Notify
-        uses: baijunyao/action-slack-notify@v3.0.0
+        uses: baijunyao/action-slack-notify@feature/refactor
         if: always()
         with:
           slack_channel_id: GN87KBVDG
