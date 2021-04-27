@@ -45,7 +45,7 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     steps:
       - name: Slack Notify
-        uses: baijunyao/action-slack-notify@feature/refactor
+        uses: baijunyao/action-slack-notify@master
         if: always()
         with:
           slack_channel_id: GN87KBVDG
